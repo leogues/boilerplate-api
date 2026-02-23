@@ -1,0 +1,20 @@
+commit-msg:
+  jobs:
+    - name: conventional-commit
+      run: bash .githooks/commit-msg.sh {1}
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: biome
+      glob: "*.{js,ts,jsx,tsx,json,jsonc}"
+      run: bunx biome check --write --staged --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+
+    - name: typecheck
+      run: bun run typecheck
+
+# pre-push:
+#   jobs:
+#     - name: branch-naming
+#       run: bash .githooks/pre-push.sh
