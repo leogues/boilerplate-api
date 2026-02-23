@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Dev Server",
+      "type": "bun",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.ts",
+      "args": ["--hot"],
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "stopOnEntry": false
+    }
+  ]
+}
