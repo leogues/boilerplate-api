@@ -4,8 +4,10 @@ import type {
   ComponentHealth,
 } from '@/modules/health/application/usecases/DTOs/CheckReadinessUseCaseDTO.ts';
 import { HealthStatus } from '@/modules/health/domain/enums/HealthStatus.ts';
+import { trace } from '@/shared/infra/decorators/trace';
 
 class HealthStatusResolver {
+  @trace()
   static resolve(pings: Record<string, boolean>): CheckReadinessOutput {
     const components: Record<string, ComponentHealth> = {};
 
@@ -18,6 +20,7 @@ class HealthStatusResolver {
     return { status, components };
   }
 
+  @trace()
   private static resolveOverallStatus(components: Record<string, ComponentHealth>): HealthStatus {
     const hasUnhealthy = Object.values(components).some(component => component.status === HealthStatus.Unhealthy);
     if (hasUnhealthy) {
@@ -27,6 +30,7 @@ class HealthStatusResolver {
     return HealthStatus.Healthy;
   }
 
+  @trace()
   private static toHealthStatus(isHealthy: boolean): HealthStatus {
     if (isHealthy) {
       return HealthStatus.Healthy;
