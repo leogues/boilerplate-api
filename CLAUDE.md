@@ -98,3 +98,7 @@ Copy `.env.example` to `.env` for local development.
 - **Biome rules:** Single quotes, trailing commas, 120-char line width, `noConsole: warn` (use injected LoggerProvider instead), `noUnusedImports: error`.
 - **Import order in bootstrap.ts matters** — `reflect-metadata` must come before tsyringe, DI container imports must come before anything that resolves from it. Biome import sorting is disabled for this file.
 
+## Code Style
+
+- **Early return:** Always prefer early return (guard clauses) over `if/else` blocks and ternary expressions. Validate preconditions at the top of functions and return/throw early to keep the happy path unindented and the code flat.
+

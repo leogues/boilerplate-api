@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "assertive"
+  high_level_summary: true
+  request_changes_workflow: true
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+  path_filters:
+    - "!bun.lock"
+    - "!dist/**"
+    - "!node_modules/**"
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "docs/coderabbit-instructions.md"
+
+chat:
+  auto_reply: true

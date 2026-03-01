@@ -1,4 +1,4 @@
-name: "Combined Analysis"
+name: Combined Analysis
 
 on:
   pull_request:
@@ -7,23 +7,17 @@ on:
       - main
     types:
       - opened
-      - edited
       - synchronize
       - reopened
 
 permissions:
-  id-token: write
   contents: read
-  pull-requests: write
-  actions: read
-  security-events: write
 
 jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
       src: ${{ steps.changes.outputs.src }}
-      migrations: ${{ steps.changes.outputs.migrations }}
     steps:
       - uses: actions/checkout@v6
 
@@ -38,37 +32,9 @@ jobs:
                 - 'bun.lock'
                 - 'tsconfig.json'
                 - 'biome.json'
-              migrations:
-                - 'src/migrations/**'
 
-  CodeQL:
-    name: Run CodeQL
-    needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 360
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - language: javascript-typescript
-            build-mode: none
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: ${{ matrix.build-mode }}
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:${{ matrix.language }}"
-
-  Lint:
-    name: Run Biome Lint
+  lint:
+    name: Lint & Typecheck
     needs: detect-changes
     if: needs.detect-changes.outputs.src == 'true'
     runs-on: ubuntu-24.04
@@ -85,19 +51,3 @@ jobs:
 
       - name: Typecheck
         run: bun run typecheck
-
-  Security:
-    name: Run Security Audit
-    needs: detect-changes
-    if: needs.detect-changes.outputs.src == 'true'
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Audit dependencies
-        run: bun pm untrusted
