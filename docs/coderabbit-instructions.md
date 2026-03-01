@@ -42,6 +42,7 @@ You are an expert code reviewer conducting comprehensive parallel reviews across
 #### Code Quality
 - [ ] TypeScript conventions followed (strict typing, no `any` without justification)
 - [ ] Proper error handling (domain exceptions extending `BaseException`, no swallowed errors)
+- [ ] **No raw `new Error()` or `throw new Error()`** — always use domain exceptions (`BadRequestException`, `NotFoundException`, `UnprocessableException`, `ForbiddenException`, `UnauthorizedException`, `InternalException`, `ServiceUnavailableException`). Raw `Error` bypasses the global error handler, returns inconsistent responses, and loses HTTP status mapping
 - [ ] Type safety (no unsafe casts, proper typing)
 - [ ] Defensive programming (null checks, input validation via TypeBox schemas)
 - [ ] DRY principle, single responsibility
@@ -63,7 +64,7 @@ You are an expert code reviewer conducting comprehensive parallel reviews across
 | Severity | Examples |
 |----------|----------|
 | **CRITICAL** | Memory leaks, infinite loops, broken core functionality, incorrect state sequencing, data flow breaks |
-| **HIGH** | Missing error handling, type safety violations, SOLID violations, missing context propagation, inconsistent patterns |
+| **HIGH** | Missing error handling, using raw `Error` instead of domain exceptions, type safety violations, SOLID violations, missing context propagation, inconsistent patterns |
 | **MEDIUM** | Code duplication, unclear naming, missing documentation, complex logic needing refactoring |
 | **LOW** | Style deviations, minor refactoring opportunities |
 
@@ -142,6 +143,28 @@ const validTransitions: Record<string, string[]> = {
 if (!validTransitions[order.status]?.includes(newStatus)) {
   throw new UnprocessableException('Invalid state transition');
 }
+```
+
+**Raw Error Instead of Domain Exception (HIGH):**
+```typescript
+// BAD: Raw Error bypasses global error handler, returns generic 500 with inconsistent shape
+if (!product) {
+  throw new Error('Product not found');
+}
+
+// GOOD: Domain exception maps to correct HTTP status and consistent response shape
+if (!product) {
+  throw new NotFoundException('Product not found');
+}
+
+// Available domain exceptions (extend BaseException):
+// BadRequestException (400)     — invalid input
+// UnauthorizedException (401)   — not authenticated
+// ForbiddenException (403)      — not authorized
+// NotFoundException (404)       — resource not found
+// UnprocessableException (422)  — valid input but can't process
+// InternalException (500)       — unexpected error (reportable)
+// ServiceUnavailableException (503) — dependency down
 ```
 
 **Missing Idempotency:**
@@ -312,7 +335,8 @@ app.get('/api/users/:id', async ({ params, user }) => {
 - [ ] Concurrent access: race conditions, parallel modifications
 
 #### Error Path Testing
-- [ ] Error conditions trigger correct domain exception types
+- [ ] Error conditions trigger correct domain exception types (not raw `Error`)
+- [ ] Each error path throws the appropriate domain exception (`NotFoundException`, `BadRequestException`, etc.)
 - [ ] Error messages are meaningful and specific
 - [ ] Error recovery works correctly
 - [ ] Partial failure scenarios handled
