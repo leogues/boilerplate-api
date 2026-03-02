@@ -18,7 +18,9 @@
     "db:migrate": "bunx kysely migrate latest",
     "db:migrate:down": "bunx kysely migrate down",
     "db:migrate:make": "bunx kysely migrate make",
-    "db:codegen": "bunx kysely-codegen --out-file src/shared/infra/persistence/types.ts"
+    "db:codegen": "bunx kysely-codegen --out-file src/shared/infra/persistence/types.ts",
+    "fta": "bunx fta-cli src --format table",
+    "fta:json": "bunx fta-cli src --json"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.2",
