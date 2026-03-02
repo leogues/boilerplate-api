@@ -1,4 +1,5 @@
 import { cacheConfig } from '@config/cache.ts';
+import { safe } from '@shared/infra/decorators/safe.ts';
 import { trace } from '@shared/infra/decorators/trace.ts';
 import { RedisClient } from 'bun';
 import type { CacheProvider } from '@/shared/domain/providers/CacheProvider/CacheProvider';
@@ -25,7 +26,13 @@ class RedisCacheProvider implements CacheProvider {
   }
 
   @trace()
+  @safe()
   async recover<T>(key: string): Promise<T | null> {
+    return this.recoverUnsafe<T>(key);
+  }
+
+  @trace()
+  async recoverUnsafe<T>(key: string): Promise<T | null> {
     const value = await this.client.get(key);
 
     if (value === null) {
@@ -41,13 +48,10 @@ class RedisCacheProvider implements CacheProvider {
   }
 
   @trace()
+  @safe(false)
   async ping(): Promise<boolean> {
-    try {
-      await this.client.send('PING', []);
-      return true;
-    } catch {
-      return false;
-    }
+    await this.client.send('PING', []);
+    return true;
   }
 }
 
