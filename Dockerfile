@@ -1,4 +1,4 @@
-FROM oven/bun AS build
+FROM oven/bun:1.3.10 AS build
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ RUN bun build \
 	src/main.ts
 
 # Install only external dependencies
-FROM oven/bun AS external-deps
+FROM oven/bun:1.3.10 AS external-deps
 
 WORKDIR /app
 
