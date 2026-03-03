@@ -9,7 +9,6 @@ import { openapiConfig } from './config/openapi.ts';
 import { errorHandler } from './shared/infra/http/hooks/errorHandler.ts';
 import { httpMetrics } from './shared/infra/http/hooks/httpMetrics.ts';
 import { requestContext } from './shared/infra/http/hooks/requestContext.ts';
-
 import { api, ops } from './routes.ts';
 
 const app = new Elysia()

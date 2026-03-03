@@ -1,3 +1,4 @@
+import { errorModels } from '@shared/infra/http/models/errorModels.ts';
 import { Elysia } from 'elysia';
 import { HealthController } from './controllers/HealthController.ts';
 import { HealthResponse, ReadinessResponse } from './schemas/healthSchemas.ts';
@@ -5,6 +6,7 @@ import { HealthResponse, ReadinessResponse } from './schemas/healthSchemas.ts';
 const controller = new HealthController();
 
 const healthRoutes = new Elysia()
+  .use(errorModels)
   .model({
     HealthResponse,
     ReadinessResponse,
@@ -23,6 +25,7 @@ const healthRoutes = new Elysia()
     },
     response: {
       200: 'ReadinessResponse',
+      503: 'ServiceUnavailableResponse',
     },
   });
 
