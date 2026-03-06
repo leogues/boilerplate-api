@@ -1,4 +1,5 @@
 import { DEPENDENCIES } from '@di/dependencies.ts';
+import { ValidationException } from '@shared/domain/exceptions/ValidationException.ts';
 import type { LoggerProvider } from '@shared/domain/providers/LoggerProvider/LoggerProvider.ts';
 import { Elysia } from 'elysia';
 import { container } from 'tsyringe';
@@ -19,6 +20,15 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
 
     const httpMapping = ExceptionHttpMapper.toHttp(exception.code);
     set.status = httpMapping.status;
+
+    if (exception instanceof ValidationException) {
+      return {
+        status: httpMapping.status,
+        error: httpMapping.error,
+        message: exception.message,
+        details: exception.details,
+      };
+    }
 
     return {
       status: httpMapping.status,

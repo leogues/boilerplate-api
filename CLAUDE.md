@@ -24,13 +24,6 @@ Infrastructure (Postgres, Redis, OTel stack): `docker compose up -d`
 
 Pre-commit hooks (lefthook): runs biome check and typecheck in parallel on staged files.
 
-## Debugging (VSCode)
-
-Requires the [Bun VSCode extension](https://marketplace.visualstudio.com/items?itemName=oven.bun-vscode). Three launch configs in `.vscode/launch.json`:
-
-- **Debug Dev Server** — launches `src/main.ts` with `--hot` under the Bun debugger. Set breakpoints and hit F5.
-
-
 ## Architecture
 
 **Runtime:** Bun + Elysia (HTTP framework) + TypeBox (schema validation & OpenAPI generation).
@@ -73,7 +66,7 @@ Domain layer defines interfaces only. Infrastructure provides concrete implement
 
 **Caching:** Redis via Bun's native `RedisClient`, exposed through `CacheProvider` interface.
 
-**Error handling:** Domain exceptions extend `BaseException` (in `src/shared/domain/exceptions/`). Available: `BadRequestException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `UnprocessableException`, `InternalException` (reportable by default), `ServiceUnavailableException`. Throw these from use cases/domain code — the global `errorHandler` hook (`src/shared/infra/hooks/errorHandler.ts`) catches them, maps to HTTP status codes via `ExceptionHttpMapper`, and returns `{ status, error, message }`. Elysia-specific errors (validation, not found, parse) are converted to domain exceptions via `ExceptionMapperChain`. Exceptions with `reportable: true` are automatically logged.
+**Error handling:** Domain exceptions extend `BaseException` (in `src/shared/domain/exceptions/`). Available: `BadRequestException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `ValidationException`, `InternalException` (reportable by default), `ServiceUnavailableException`. Throw these from use cases/domain code — the global `errorHandler` hook (`src/shared/infra/hooks/errorHandler.ts`) catches them, maps to HTTP status codes via `ExceptionHttpMapper`, and returns `{ status, error, message }`. Elysia-specific errors (validation, not found, parse) are converted to domain exceptions via `ExceptionMapperChain`. Exceptions with `reportable: true` are automatically logged.
 
 **OpenAPI docs:** Accessible at `http://localhost:3000/openapi` (Scalar UI). Auto-generated from route TypeBox schemas.
 

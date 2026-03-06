@@ -3,7 +3,7 @@ enum ExceptionCode {
   Unauthorized = 'UNAUTHORIZED',
   Forbidden = 'FORBIDDEN',
   NotFound = 'NOT_FOUND',
-  Unprocessable = 'UNPROCESSABLE',
+  Validation = 'VALIDATION',
   Internal = 'INTERNAL',
   ServiceUnavailable = 'SERVICE_UNAVAILABLE',
 }

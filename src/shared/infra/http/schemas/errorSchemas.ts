@@ -7,11 +7,19 @@ const ErrorResponse = (status: number, error: string) =>
     message: t.String(),
   });
 
+const ValidationErrorResponse = (status: number, error: string) =>
+  t.Object({
+    status: t.Literal(status),
+    error: t.Literal(error),
+    message: t.String(),
+    details: t.Optional(t.Record(t.String(), t.String())),
+  });
+
 const BadRequestResponse = ErrorResponse(400, 'Bad Request');
 const UnauthorizedResponse = ErrorResponse(401, 'Unauthorized');
 const ForbiddenResponse = ErrorResponse(403, 'Forbidden');
 const NotFoundResponse = ErrorResponse(404, 'Not Found');
-const UnprocessableResponse = ErrorResponse(422, 'Unprocessable Entity');
+const UnprocessableResponse = ValidationErrorResponse(422, 'Unprocessable Entity');
 const InternalErrorResponse = ErrorResponse(500, 'Internal Server Error');
 const ServiceUnavailableResponse = ErrorResponse(503, 'Service Unavailable');
 

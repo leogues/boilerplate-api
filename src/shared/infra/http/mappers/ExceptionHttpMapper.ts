@@ -11,7 +11,7 @@ class ExceptionHttpMapper {
     [ExceptionCode.Unauthorized]: { status: 401, error: 'Unauthorized' },
     [ExceptionCode.Forbidden]: { status: 403, error: 'Forbidden' },
     [ExceptionCode.NotFound]: { status: 404, error: 'Not Found' },
-    [ExceptionCode.Unprocessable]: { status: 422, error: 'Unprocessable Entity' },
+    [ExceptionCode.Validation]: { status: 422, error: 'Unprocessable Entity' },
     [ExceptionCode.Internal]: { status: 500, error: 'Internal Server Error' },
     [ExceptionCode.ServiceUnavailable]: { status: 503, error: 'Service Unavailable' },
   };
