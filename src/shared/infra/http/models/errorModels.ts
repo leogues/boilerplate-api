@@ -6,7 +6,7 @@ import {
   NotFoundResponse,
   ServiceUnavailableResponse,
   UnauthorizedResponse,
-  UnprocessableResponse,
+  ValidationResponse,
 } from '../schemas/errorSchemas.ts';
 
 const errorModels = new Elysia({ name: 'errorModels' }).model({
@@ -14,7 +14,7 @@ const errorModels = new Elysia({ name: 'errorModels' }).model({
   UnauthorizedResponse,
   ForbiddenResponse,
   NotFoundResponse,
-  UnprocessableResponse,
+  ValidationResponse,
   InternalErrorResponse,
   ServiceUnavailableResponse,
 });

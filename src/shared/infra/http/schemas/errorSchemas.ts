@@ -19,7 +19,7 @@ const BadRequestResponse = ErrorResponse(400, 'Bad Request');
 const UnauthorizedResponse = ErrorResponse(401, 'Unauthorized');
 const ForbiddenResponse = ErrorResponse(403, 'Forbidden');
 const NotFoundResponse = ErrorResponse(404, 'Not Found');
-const UnprocessableResponse = ValidationErrorResponse(422, 'Unprocessable Entity');
+const ValidationResponse = ValidationErrorResponse(422, 'Unprocessable Entity');
 const InternalErrorResponse = ErrorResponse(500, 'Internal Server Error');
 const ServiceUnavailableResponse = ErrorResponse(503, 'Service Unavailable');
 
@@ -30,5 +30,5 @@ export {
   NotFoundResponse,
   ServiceUnavailableResponse,
   UnauthorizedResponse,
-  UnprocessableResponse,
+  ValidationResponse,
 };

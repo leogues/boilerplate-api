@@ -91,6 +91,6 @@ Copy `.env.example` to `.env` for local development.
 - **Biome rules:** Single quotes, trailing commas, 120-char line width, `noConsole: warn` (use injected LoggerProvider instead), `noUnusedImports: error`.
 - **Import order in bootstrap.ts matters** — `reflect-metadata` must come before tsyringe, DI container imports must come before anything that resolves from it. Biome import sorting is disabled for this file.
 - **Error response mapping in routes:** Every route must map its possible error responses in the `response` object for accurate OpenAPI documentation. Use `.use(errorModels)` from `@shared/infra/http/models/errorModels.ts` and reference error schemas by string name. Rules:
-  - **Routes with body/params/query validation (TypeBox schemas):** add `422: 'UnprocessableResponse'` and/or `400: 'BadRequestResponse'`.
+  - **Routes with body/params/query validation (TypeBox schemas):** add `422: 'ValidationResponse'` and/or `400: 'BadRequestResponse'`.
   - **Route-specific exceptions:** if the use case/domain throws an exception (e.g. `NotFoundException`, `ServiceUnavailableException`), map the corresponding status code (e.g. `404: 'NotFoundResponse'`, `503: 'ServiceUnavailableResponse'`).
 
